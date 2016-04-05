@@ -501,7 +501,7 @@ angular.module('ui.mask', [])
 
                             function keydownHandler(e) {
                                 /*jshint validthis: true */
-                                var isKeyBackspace = e.which === 8,
+                                var isKeyBackspace = e.which === 8 || e.which === 229,
                                     caretPos = getCaretPosition(this) - 1 || 0; //value in keydown is pre change so bump caret position back to simulate post change
 
                                 if (isKeyBackspace) {
@@ -552,7 +552,7 @@ angular.module('ui.mask', [])
 
                                         isKeyLeftArrow = eventWhich === 37,
                                         // Necessary due to "input" event not providing a key code
-                                        isKeyBackspace = eventWhich === 8 || (eventType !== 'keyup' && isDeletion && (caretPosDelta === -1)),
+                                        isKeyBackspace = eventWhich === 8 || eventWhich === 229 || (eventType !== 'keyup' && isDeletion && (caretPosDelta === -1)),
                                         isKeyDelete = eventWhich === 46 || (eventType !== 'keyup' && isDeletion && (caretPosDelta === 0) && !wasSelected),
                                         // Handles cases where caret is moved and placed in front of invalid maskCaretMap position. Logic below
                                         // ensures that, on click or leftward caret placement, caret is moved leftward until directly right of
@@ -568,6 +568,7 @@ angular.module('ui.mask', [])
                                 }
 
                                 if (isKeyBackspace && preventBackspace) {
+                                    preventBackspace = false;
                                     iElement.val(maskPlaceholder);
                                     // This shouldn't be needed but for some reason after aggressive backspacing the controller $viewValue is incorrect.
                                     // This keeps the $viewValue updated and correct.
