@@ -461,23 +461,25 @@ angular.module('ui.mask', [])
 
                             function triggerChangeEvent(element) {
                                 var change;
-                                if (angular.isFunction(window.Event) && !element.fireEvent) {
+                                try {
                                     // modern browsers and Edge
                                     change = new Event('change', {
                                         view: window,
                                         bubbles: true,
                                         cancelable: false
                                     });
-                                    element.dispatchEvent(change);
-                                } else if ('createEvent' in document) {
-                                    // older browsers
-                                    change = document.createEvent('HTMLEvents');
-                                    change.initEvent('change', false, true);
-                                    element.dispatchEvent(change);
-                                }
-                                else if (element.fireEvent) {
-                                    // IE <= 11
-                                    element.fireEvent('onchange');
+                                    element.dispatchEvent(change);	
+                                } catch (e) {
+                                    if ('createEvent' in document) {
+	                                    // older browsers
+	                                    change = document.createEvent('HTMLEvents');
+	                                    change.initEvent('change', false, true);
+	                                    element.dispatchEvent(change);
+	                                }
+	                                else if (element.fireEvent) {
+	                                    // IE <= 11
+	                                    element.fireEvent('onchange');
+	                                }	
                                 }
                             }
 
